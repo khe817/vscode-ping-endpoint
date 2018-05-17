@@ -1,7 +1,7 @@
 {
     "name": "ping-endpoint",
     "displayName": "ping-endpoint",
-    "description": "Ping endpoint",
+    "description": "This extension shows ping result in the status bar, and shows if the endpoint is online or offline.",
     "version": "0.0.1",
     "publisher": "khe817",
     "engines": {
@@ -10,6 +10,11 @@
     "categories": [
         "Other"
     ],
+    "repository": {
+        "url": "https://github.com/khe817/vscode-ping-endpoint.git",
+        "type": "git"
+    },
+    "homepage": "https://github.com/khe817/vscode-ping-endpoint",
     "activationEvents": [
         "*"
     ],
