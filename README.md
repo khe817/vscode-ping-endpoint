@@ -8,6 +8,10 @@ Personally, I use this as an indicator for Spring Boot project compile result; i
 
 The extension shows the ping and if the configured endpoint is online and responsive (`curl` result: `HTTP/1.1 200|HTTP/2 200`).
 
+![No network](https://raw.githubusercontent.com/khe817/vscode-ping-endpoint/master/no-network.PNG)
+
+![Online](https://raw.githubusercontent.com/khe817/vscode-ping-endpoint/master/online.PNG)
+
 To start it, run command: `F1` > `Ping endpoint: Start`
 
 To stop it, run command: `F1` > `Ping endpoint: Stop`
