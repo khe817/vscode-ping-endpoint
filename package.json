@@ -1,0 +1,76 @@
+{
+    "name": "ping-endpoint",
+    "displayName": "ping-endpoint",
+    "description": "Ping endpoint",
+    "version": "0.0.1",
+    "publisher": "khe817",
+    "engines": {
+        "vscode": "^1.20.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "*"
+    ],
+    "main": "./extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "extension.pingEndpoint.start",
+                "title": "Ping endpoint: Start"
+            },
+            {
+                "command": "extension.pingEndpoint.stop",
+                "title": "Ping endpoint: Stop"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "Ping endpoint configuration",
+            "properties": {
+                "ping-endpoint.hostname": {
+                    "type": "string",
+                    "default": "localhost",
+                    "description": "Host to ping. Preferable IP address."
+                },
+                "ping-endpoint.port": {
+                    "type": "string",
+                    "default": "80",
+                    "description": "Port to ping."
+                },
+                "ping-endpoint.endpoint": {
+                    "type": "string",
+                    "default": "/",
+                    "description": "Endpoint to ping."
+                },
+                "ping-endpoint.healthCheck.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Send curl to hit endpoint for success HTTP status, one time event after ping success."
+                },
+                "ping-endpoint.healthCheck.ssl": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Secured connection?"
+                },
+                "ping-endpoint.healthCheck.includePort": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Curl include port?"
+                }
+            }
+        }
+    },
+    "scripts": {
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "@types/mocha": "^2.2.42",
+        "@types/node": "^10.0.10",
+        "eslint": "^4.11.0",
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6"
+    }
+}
