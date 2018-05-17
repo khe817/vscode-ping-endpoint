@@ -41,25 +41,33 @@ suite("Extension Tests", function() {
         assert.equal(-1, [1, 2, 3].indexOf(0));
     });
 
-    test('Ping full endpoint, default config', function(done) {
+    test('Ping full endpoint, default config; expect status ONLINE HTTP 200', function(done) {
         runPingWithConfig(defaultConfig);
         done();
     });
 
-    test('Ping full endpoint, wikipedia config', function (done) {
+    test('Ping full endpoint, wikipedia config; expect status ONLINE HTTP 200', function (done) {
         runPingWithConfig(wikipediaConfig);
         done();
     });
 
-    test('Ping full endpoint, no health check config', function (done) {
-        runPingWithConfig(noHealthCheckConfig);
+    test('Ping full endpoint, wikipedia, no SSL config; expect status NO NETWORK HTTP 301', function (done) {
+        var wikipediaNoSslConfig = wikipediaConfig;
+        wikipediaNoSslConfig.healthCheck.ssl = false;
+        runPingWithConfig(wikipediaNoSslConfig, ['HTTP', '301']);
+        done();
+    });
+
+    test('Ping full endpoint, no health check config; expect status ONLINE ok', function (done) {
+        runPingWithConfig(noHealthCheckConfig, ['OK']);
         done();
     });
 
 
 });
 
-function runPingWithConfig(config) {
+function runPingWithConfig(config, expectedInOutput) {
+    var expectedInOutput = expectedInOutput || ['HTTP', '200'];
     var ping = new Ping.Ping(config);
     const pingPromise = new Promise(function (resolve, reject) {
         setTimeout(function () {
@@ -68,9 +76,10 @@ function runPingWithConfig(config) {
         }, 1500);
     });
     pingPromise.then(function () {
-        assert.equal(ping.statusBar.text.includes('HTTP'), false);
-        assert.equal(ping.statusBar.text.includes('200'), false);
-        assert.equal(ping.statusBar.text.includes('ok'), true);
+        expectedInOutput.forEach(function (output) {
+            assert.equal(ping.statusBar.text.includes(output), true);
+        });
+        console.log(ping.statusBar.text);
         ping.stop();
     });
 }

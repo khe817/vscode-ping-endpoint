@@ -90,7 +90,7 @@ class Ping {
             return this.healthCheck();
         }
 
-        return 'ok';
+        return 'OK';
     }
 
     /**
@@ -138,7 +138,7 @@ class Ping {
         }
 
         var pingCmdStr = ping_helper.getShell()
-            + '-c "curl -i '
+            + '-c "curl -o /dev/null -s -w \\"%{http_code}\\" '
             + (this.config.healthCheck.ssl ? 'https://' : 'http://')
             + this.config.hostname
             + (this.config.healthCheck.includePort ? ':' + this.config.port : '')
@@ -153,10 +153,10 @@ class Ping {
      * @return null if fail
      */
     parseHttpResponseStatus(pingCmdResult) {
-        var parsed = pingCmdResult.match(/(HTTP\/1.1 200 | HTTP \/ 2 200)/gm);
-        if (parsed) {
-            return parsed[0];
+        if (pingCmdResult == '200') {
+            return 'HTTP 200';
         } else {
+            this.setMsg('HTTP ' + pingCmdResult);
             return null;
         }
     }
