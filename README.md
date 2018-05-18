@@ -25,17 +25,21 @@ Linux, Windows, Windows Subsystem for Linux (WSL)
 
 This extension contributes the following settings:
 
-* `ping-endpoint.hostname`: Hostname to ping (default: `localhost`)
-* `ping-endpoint.port`: Port to ping (default: `80`)
+* `ping-endpoint.hostname`: Hostname to ping (required, default: `localhost`)
+* `ping-endpoint.port`: Port to ping (required, default: `80`)
 * `ping-endpoint.endpoint`: Endpoint for health check (default: `/`)
 * `ping-endpoint.healthCheck.enabled`: Send curl to hit endpoint for success HTTP status, one time event after ping success. (default: `true`)
 * `ping-endpoint.healthCheck.ssl`: Curl use secured connection (`HTTPS`)?. (default: `false`)
 * `ping-endpoint.healthCheck.includePort`: Curl include port? (default: `true`)
 
-## Release Notes
-
-### 0.0.1
-Initial release
-
-### 0.0.2
-Better curl
+#### Example setting:
+```json
+{
+    "ping-endpoint.hostname": "en.wikipedia.org",
+    "ping-endpoint.port": 80,
+    "ping-endpoint.endpoint": "/wiki/Main_Page",
+    "ping-endpoint.healthCheck.enabled": true,
+    "ping-endpoint.healthCheck.ssl": true,
+    "ping-endpoint.healthCheck.includePort": false,
+}
+```

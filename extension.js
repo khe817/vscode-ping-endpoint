@@ -7,8 +7,7 @@ const Ping = require('./src/Ping');
 const ping_helper = require('./src/ping_helper');
 var os = ping_helper.getOs();
 const config = vscode.workspace.getConfiguration().get('ping-endpoint');
-
-let ping = new Ping.Ping(config);
+var ping = new Ping.Ping(config);
 
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
@@ -19,10 +18,10 @@ function activate(context) {
         vscode.window.showInformationMessage(os + ' not supported.');
         return false;
     }
-    let pingTarget = config.hostname + ':' + config.port + config.endpoint;
+    var pingTarget = config.hostname + ':' + config.port + config.endpoint;
 
     // start
-    let disposable = vscode.commands.registerCommand('extension.pingEndpoint.start', function () {
+    var disposable = vscode.commands.registerCommand('extension.pingEndpoint.start', function () {
         ping.start();
         vscode.window.showInformationMessage('Pinging ' + pingTarget);
 

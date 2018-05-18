@@ -30,14 +30,14 @@ class Ping {
     }
 
     tick() {
-        let pingCmdResult = '';
+        var pingCmdResult = '';
         try {
             pingCmdResult = this.switchPingBasedOnOS();
         } catch (e) {
             vscode.window.showInformationMessage('Error pinging ' + e.toString());
         }
         this.setMsg(pingCmdResult);
-        this.setStatus(typeof pingCmdResult != 'undefined' && pingCmdResult != null);
+        this.setStatus(this.pingSucceeded(pingCmdResult));
         this.show();
     }
 
@@ -58,8 +58,20 @@ class Ping {
         this.msg = msg;
     }
 
+    pingSucceeded(pingCmdResult) {
+        if (typeof pingCmdResult == 'undefined' || pingCmdResult == null) {
+            return false;
+        }
+
+        if (pingCmdResult != 'HTTP 200' && pingCmdResult != 'OK') {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
-     * @return null if fail, or system not supported
+     * @return null if fails, or system not supported
      */
     switchPingBasedOnOS() {
         switch (this.os) {
@@ -78,7 +90,7 @@ class Ping {
     }
 
     /**
-     * @return null if fail
+     * @return null if fails
      */
     doPingLinux() {
         var pingCmd = ping_helper.execNetcatCmd('-c', this.config.hostname, this.config.port);
@@ -94,7 +106,8 @@ class Ping {
     }
 
     /**
-     * @return null if fail
+     * @param shellPrefix '-c' for Git Bash on Windows (MINGW) or '/d /s /c' for Windows (cmd)
+     * @return null if fails
      */
     doPingWindows(shellPrefix) {
         var pingCmd = '';
@@ -114,7 +127,7 @@ class Ping {
     }
 
     /**
-     * @return null if fail
+     * @return null if fails
      */
     doPingBashOnWindows() {
         var pingResult = this.doPingWindows('-c');
@@ -130,7 +143,7 @@ class Ping {
      * Only run health check the first time when connection is up after being down.
      * Run everytime connection is up again.
      *
-     * @return null if fail
+     * @return null if fails
      */
     healthCheck() {
         if (this.previousSuccess) {
@@ -150,14 +163,13 @@ class Ping {
     }
 
     /**
-     * @return null if fail
+     * @return null if fails
      */
     parseHttpResponseStatus(pingCmdResult) {
         if (pingCmdResult == '200') {
             return 'HTTP 200';
         } else {
-            this.setMsg('HTTP ' + pingCmdResult);
-            return null;
+            return 'HTTP ' + pingCmdResult;
         }
     }
 

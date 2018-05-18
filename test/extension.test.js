@@ -58,7 +58,7 @@ suite("Extension Tests", function() {
         done();
     });
 
-    test('Ping full endpoint, no health check config; expect status ONLINE ok', function (done) {
+    test('Ping full endpoint, no health check config; expect status ONLINE OK', function (done) {
         runPingWithConfig(noHealthCheckConfig, ['OK']);
         done();
     });
@@ -70,16 +70,15 @@ function runPingWithConfig(config, expectedInOutput) {
     var expectedInOutput = expectedInOutput || ['HTTP', '200'];
     var ping = new Ping.Ping(config);
     const pingPromise = new Promise(function (resolve, reject) {
-        setTimeout(function () {
-            ping.start();
-            resolve(ping);
-        }, 1500);
+        ping.tick();
+        resolve(ping);
     });
-    pingPromise.then(function () {
+    pingPromise.then(function (ping) {
+        assert(typeof ping.statusBar.text !== 'undefined');
         expectedInOutput.forEach(function (output) {
             assert.equal(ping.statusBar.text.includes(output), true);
         });
         console.log(ping.statusBar.text);
-        ping.stop();
-    });
+    })
+    .catch(function(error) {console.log(error);});
 }

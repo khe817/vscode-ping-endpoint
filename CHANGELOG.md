@@ -8,3 +8,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## 0.0.2
 - Better curl
+
+## 0.0.3
+- Improve displayed status message.
+- Improve tests.
+- Add example settings.

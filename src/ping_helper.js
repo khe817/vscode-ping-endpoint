@@ -65,6 +65,9 @@ function getOs() {
     return 'other';
 }
 
+/**
+ * @param shellPrefix '-c' for Git Bash on Windows (MINGW) or '/d /s /c' for Windows (cmd)
+ */
 function execNetcatCmd(shellPrefix, hostname, port) {
     try {
         var netcatCmd = child_process.execSync(getShell()
@@ -78,6 +81,9 @@ function execNetcatCmd(shellPrefix, hostname, port) {
     }
 }
 
+/**
+ * @param shellPrefix '-c' for Git Bash on Windows (MINGW) or '/d /s /c' for Windows (cmd)
+ */
 function execNetstatCmd(shellPrefix, hostname, port) {
     try {
         var netstatCmd = child_process.execSync(getShell()
