@@ -13,3 +13,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Improve displayed status message.
 - Improve tests.
 - Add example settings.
+
+## 0.0.4
+- Update dependencies to elimiate vulnerabilities.
