@@ -4,7 +4,6 @@ Object.defineProperty(exports, '__esModule', { value: true });
 const vscode = require("vscode");
 const child_process = require("child_process");
 const ping_helper = require('./ping_helper');
-const shell = ping_helper.getShell();
 
 class Ping {
     constructor(config) {
@@ -150,13 +149,13 @@ class Ping {
             return this.getMsg();
         }
 
-        var pingCmdStr = ping_helper.getShell()
-            + '-c "curl -o /dev/null -s -w \\"%{http_code}\\" '
-            + (this.config.healthCheck.ssl ? 'https://' : 'http://')
-            + this.config.hostname
-            + (this.config.healthCheck.includePort ? ':' + this.config.port : '')
-            + this.config.endpoint
-            + '"';
+        let pingCmdStr = ping_helper.getShell() +
+            '-c "curl -o /dev/null -s -w \\"%{http_code}\\" ' +
+            (this.config.healthCheck.ssl ? 'https://' : 'http://') +
+            this.config.hostname +
+            (this.config.healthCheck.includePort ? ':' + this.config.port : '') +
+            this.config.endpoint +
+            '"';
         var pingCmd = child_process.execSync(pingCmdStr);
         var httpStatus = this.parseHttpResponseStatus(pingCmd.toString());
         return httpStatus;

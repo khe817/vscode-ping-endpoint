@@ -16,3 +16,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## 0.0.4
 - Update dependencies to elimiate vulnerabilities.
+
+## 0.0.5
+- Update dependencies to latest versions.
+- Fix support for Linux

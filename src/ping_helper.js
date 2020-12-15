@@ -6,6 +6,10 @@ const platform = (process.platform === 'darwin') ? 'darwin' : process.platform =
 
 module.exports = {
 
+    getVscodeConfigToStr: function(configName) {
+        return getVscodeConfigToStr(configName);
+    },
+
     getShell: function () {
         return getShell();
     },
@@ -24,20 +28,41 @@ module.exports = {
 
 };
 
+/**
+ * @return null if not exist.
+ */
+function getVscodeConfigToStr(configName = '') {
+    const configValue = vscode.workspace.getConfiguration().get(configName);
+    if (configValue == 'undefined' || configValue == null) return null;
+    return configValue.toString();
+}
+
+/**
+ * @return null if not exist.
+ */
 function getShell() {
+    let integratedShell = null;
     switch (platform) {
         case 'win32-archive':
-            return '"' + vscode.workspace.getConfiguration().get('terminal.integrated.shell.windows').toString() + '" ';
+            integratedShell = getVscodeConfigToStr('terminal.integrated.shell.windows');
+            break;
 
         case 'linux-x64':
-            return vscode.workspace.getConfiguration().get('terminal.integrated.shell.linux').toString() + ' ';
+            integratedShell = getVscodeConfigToStr('terminal.integrated.shell.linux');
+            if (integratedShell == null) integratedShell = '/bin/bash';
+            break;
 
         default:
             return null;
 
     }
+    if (integratedShell == null) return null;
+    return '"' + integratedShell + '" ';
 }
 
+/**
+ * @return 'other' if unable to determine.
+ */
 function getOs() {
     if (getShell() == null) return 'other';
 
@@ -66,32 +91,34 @@ function getOs() {
 }
 
 /**
- * @param shellPrefix '-c' for Git Bash on Windows (MINGW) or '/d /s /c' for Windows (cmd)
+ * @param shellPrefix '-c' for Linux and Git Bash on Windows (MINGW), or '/d /s /c' for Windows (cmd)
  */
 function execNetcatCmd(shellPrefix, hostname, port) {
     try {
-        var netcatCmd = child_process.execSync(getShell()
-            + shellPrefix + ' "nc -zv '
-            + hostname + ' '
-            + port
-            + ' 2>&1"');
-        return netcatCmd.toString();
+        let netcatCmd = getShell() +
+            shellPrefix + ' "nc -zv ' +
+            hostname + ' ' +
+            port +
+            ' 2>&1"';
+        var result = child_process.execSync(netcatCmd);
+        return result.toString();
     } catch (e) {
         return '';
     }
 }
 
 /**
- * @param shellPrefix '-c' for Git Bash on Windows (MINGW) or '/d /s /c' for Windows (cmd)
+ * @param shellPrefix '-c' for Git Bash on Windows (MINGW), or '/d /s /c' for Windows (cmd)
  */
 function execNetstatCmd(shellPrefix, hostname, port) {
     try {
-        var netstatCmd = child_process.execSync(getShell()
-            + shellPrefix + ' "netstat -ano '
-            + '| findstr ' + hostname + ' '
-            + '| findstr ' + port + ' '
-            + '| findstr LISTENING"');
-        return netstatCmd.toString();
+        let netstatCmd = getShell() +
+            shellPrefix + ' "netstat -ano ' +
+            '| findstr ' + hostname + ' ' +
+            '| findstr ' + port + ' ' +
+            '| findstr LISTENING"';
+        var result = child_process.execSync(netstatCmd);
+        return result.toString();
     } catch (e) {
         return '';
     }
